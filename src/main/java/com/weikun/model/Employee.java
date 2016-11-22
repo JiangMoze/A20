@@ -2,6 +2,15 @@ package com.weikun.model;
 
 public class Employee {
     private Integer id;
+    private Object dep;
+
+    public Object getDep() {
+        return dep;
+    }
+
+    public void setDep(Object dep) {
+        this.dep = dep;
+    }
 
     private String name;
 

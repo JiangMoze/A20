@@ -3,20 +3,30 @@ package com.weikun.mapper;
 import com.weikun.model.Dep;
 import com.weikun.model.DepExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 public interface DepMapper {
+
+
+
+
+    //一对多演示
+
+    @Select({
+            "SELECT * FROM dep where deptno=#{no}"
+    })
+    @Results({
+        @Result(id = true, column = "deptno", property = "deptno"),
+        @Result(column = "deptname", property = "deptname"),
+            @Result(property = "list",javaType = List.class, column = "deptno",
+                    many = @Many(select="com.weikun.mapper.EmployeeMapper.selectEmployeesByNo"))
+
+                    })
+    Dep findDepEmployeesById(@Param("no") int no);
+
+
     @SelectProvider(type=DepSqlProvider.class, method="countByExample")
     long countByExample(DepExample example);
 

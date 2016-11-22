@@ -2,6 +2,15 @@ package com.weikun.model;
 
 public class Dep {
     private Integer deptno;
+    private Object list;
+
+    public Object getList() {
+        return list;
+    }
+
+    public void setList(Object list) {
+        this.list = list;
+    }
 
     private String deptname;
 

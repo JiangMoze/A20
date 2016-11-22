@@ -3,20 +3,37 @@ package com.weikun.mapper;
 import com.weikun.model.Employee;
 import com.weikun.model.EmployeeExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 public interface EmployeeMapper {
+
+    @Select({
+            "SELECT * FROM employee where id=#{id}"
+    })
+    @Results({
+            @Result(column="Id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="deptno", property="deptno", jdbcType=JdbcType.INTEGER),
+            @Result(column="sex", property="sex", jdbcType=JdbcType.CHAR),
+            @Result(property="dep", column = "deptno",
+                one=@One( select = "com.weikun.mapper.DepMapper.selectByPrimaryKey"))
+    })
+    Employee selectDepByEmployee(@Param("id") int id);//通过从表找到主表
+
+
+    @Select({
+            "SELECT * FROM employee where deptno=#{no}"
+    })
+    @Results({
+            @Result(column="Id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+            @Result(column="deptno", property="deptno", jdbcType=JdbcType.INTEGER),
+            @Result(column="sex", property="sex", jdbcType=JdbcType.CHAR)
+    })
+    List<Employee> selectEmployeesByNo(@Param("no") int no);//通过部门编号找到所有员工
+
     @SelectProvider(type=EmployeeSqlProvider.class, method="countByExample")
     long countByExample(EmployeeExample example);
 

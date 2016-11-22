@@ -10,6 +10,8 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class EmployeeSqlProvider {
 
+
+
     public String countByExample(EmployeeExample example) {
         SQL sql = new SQL();
         sql.SELECT("count(*)").FROM("employee");

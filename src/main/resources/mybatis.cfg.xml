@@ -35,6 +35,8 @@
     </environments>     
   	 <mappers>
          <mapper class="com.weikun.mapper.UserMapper"/>
+         <mapper class="com.weikun.mapper.DepMapper"/>
+         <mapper class="com.weikun.mapper.EmployeeMapper"/>
 
     </mappers>  
         
