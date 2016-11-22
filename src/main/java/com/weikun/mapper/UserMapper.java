@@ -3,17 +3,9 @@ package com.weikun.mapper;
 import com.weikun.model.User;
 import com.weikun.model.UserExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.DeleteProvider;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.StatementType;
 import org.apache.ibatis.type.JdbcType;
 
 public interface UserMapper {
@@ -49,6 +41,34 @@ public interface UserMapper {
         @Result(column="birth", property="birth", jdbcType=JdbcType.DATE)
     })
     List<User> selectByExample(UserExample example);
+
+
+    @Select("call query_userbyid(#{in_id, mode=IN, jdbcType=INTEGER})")
+    @Options(statementType= StatementType.CALLABLE )
+    @Results({
+            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+            @Result(column="age", property="age", jdbcType=JdbcType.INTEGER),
+            @Result(column="birth", property="birth", jdbcType=JdbcType.DATE)
+    })
+    User selectByProc(@Param("in_id") int in_id);
+
+
+    @Select("call query_userbyresult(" +
+            "#{in_id, mode=IN, jdbcType=INTEGER}," +
+            "#{out_result, mode=OUT, jdbcType=VARCHAR})")
+    @Options(statementType= StatementType.CALLABLE )
+    @Results({
+            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="username", property="username", jdbcType=JdbcType.VARCHAR),
+            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+            @Result(column="age", property="age", jdbcType=JdbcType.INTEGER),
+            @Result(column="birth", property="birth", jdbcType=JdbcType.DATE)
+    })
+    User selectByProc1(@Param("in_id") int in_id,@Param("out_result") String out_result);
+
+
 
     @Select({
         "select",
